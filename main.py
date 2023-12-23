@@ -4,7 +4,7 @@ import pygame, time
 #screen size
 width = 1200
 height = 800
-G = 0.0001
+G = 0.001
 
 class virus:
     def __init__(self):
@@ -95,6 +95,8 @@ def drawing(screen, viruses, circles):
         pygame.draw.circle(screen, item.color, (item.x, item.y), item.radius)
     pygame.display.update()
 #virus2man infection
+def gravity(vector):
+    return G * 1 / abs(vector) ** 7 * (vector)
 def collisions(viruses, mans):
     for item_v in viruses:
         item_v.acceleration_x = 0
@@ -107,9 +109,9 @@ def collisions(viruses, mans):
                 item_m.infected = True
                 item_m.color = (255,255,255)
                 item_m.infected_time = 100
-            else:
-                item_v.acceleration_x += G * 1 / abs(item_m.x-item_v.x)**3 * (item_m.x-item_v.x)
-                item_v.acceleration_y += G * 1 / abs(item_m.y-item_v.y)** 3 * (item_m.y - item_v.y)
+            elif distance <= item_v.radius * 10:
+                item_v.acceleration_x += gravity(item_m.x-item_v.x)
+                item_v.acceleration_y += gravity(item_m.y-item_v.y)
     for item_m in mans:
         item_m.acceleration_x = 0
         item_m.acceleration_y = 0
@@ -117,9 +119,9 @@ def collisions(viruses, mans):
             distance = line(item_v.x, item_m.x, item_v.y, item_m.y)
             if distance <= item_v.radius + item_m.radius:
                 pass
-            else:
-                item_m.acceleration_x += G * 1 / abs(item_m.x - item_v.x) ** 3 * (item_m.x - item_v.x)
-                item_m.acceleration_y += G * 1 / abs(item_m.y - item_v.y) ** 3 * (item_m.y - item_v.y)
+            elif distance <= item_m.radius * 10:
+                item_m.acceleration_x -= gravity(item_m.x - item_v.x)
+                item_m.acceleration_y -= gravity(item_m.y - item_v.y)
 
     #man2man infection
     # for item_v in mans:
@@ -137,7 +139,7 @@ def collisions(viruses, mans):
 
 if __name__ == "__main__":
     screen1 = game_init()
-    viruses = [virus() for i in range(20)]
+    viruses = [virus() for i in range(100)]
     mans = [man() for i in range(100)]
 
     timer = 0 #timer of steps

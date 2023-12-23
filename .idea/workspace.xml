@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ec67b88-0c04-485c-93e3-8bd99f977e4f" name="Changes" comment="First working variant">
+    <list default="true" id="4ec67b88-0c04-485c-93e3-8bd99f977e4f" name="Changes" comment="Accelerated viruses">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
@@ -82,11 +82,20 @@
       <option name="project" value="LOCAL" />
       <updated>1703345609466</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Accelerated viruses">
+      <option name="closed" value="true" />
+      <created>1703350287193</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1703350287193</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First working variant" />
-    <option name="LAST_COMMIT_MESSAGE" value="First working variant" />
+    <MESSAGE value="Accelerated viruses" />
+    <option name="LAST_COMMIT_MESSAGE" value="Accelerated viruses" />
   </component>
 </project>
