@@ -12,6 +12,8 @@ class creature:
         self.color = (255,255,255)
         self.max_hp = 10
         self.hp = 10
+        self.lifetime = 0
+        self.maxlife = 1e6
         self.radius = 5
         self.x = randint(0, width)
         self.y = randint(0,height)
@@ -54,20 +56,24 @@ class creature:
 class virus(creature):
     def __init__(self):
         creature.__init__(self)
+        self.maxlife = 1e7
         self.color = (255,0,0)
-        self.radius = 2
+        self.radius = 5
         self.score = 0
+
+    def __add__(self, other):
+        baby = virus()
+        return baby
 
 class man(creature):
     def __init__(self):
         creature.__init__(self)
+        self.maxlife = 1e8
         self.color = (0,255,0)
         self.radius = 5
 
     def __add__(self, other):
         baby = man()
-        # baby.x = (self.x+other.x)/2
-        # baby.y = (self.y+other.y)/2
         return baby
 
 def line(x1,x2,y1,y2):
@@ -95,11 +101,20 @@ def collisions(viruses, mans):
                 man.color = (255,255,255)
     return mans
 
+def dieOld(animals):
+    for animal in animals:
+        if random()<animal.lifetime/animal.maxlife:
+            animals.remove(animal)
+    return animals
+
+def comeOld(animals):
+    for animal in animals:
+        animal.lifetime += 1
 def borning(animals):
     children = []
     for mother in animals:
         for father in animals:
-            if mother - father < mother.radius + father.radius:
+            if mother - father < mother.radius + father.radius and random()>0.99:
                 children.append(mother+father)
     return children
 
@@ -119,7 +134,13 @@ if __name__ == "__main__":
         for item in mans:
             item.move()
         mans = collisions(viruses,mans)
+        comeOld(viruses)
+        comeOld(mans)
+        viruses = dieOld(viruses)
+        mans = dieOld(mans)
         mans += borning(mans)
+        viruses += borning(viruses)
+
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
