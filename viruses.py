@@ -56,28 +56,19 @@ class virus(creature):
         creature.__init__(self)
         self.color = (255,0,0)
         self.radius = 2
-        self.infect = False
         self.score = 0
-
-    def __add__(self, other):
-        baby = virus()
-        baby.x = (self.x+other.x)/2
-        baby.y = (self.y+other.y)/2
-        return baby
 
 class man(creature):
     def __init__(self):
         creature.__init__(self)
         self.color = (0,255,0)
         self.radius = 5
-        self.infected = False
-        self.infected_time = 0
 
-    def treating(self):
-        if self.infected_time > 0:
-            self.infected_time -= 1
-            if self.infected_time == 0:
-                self.color = (0, 255, 0)
+    def __add__(self, other):
+        baby = man()
+        # baby.x = (self.x+other.x)/2
+        # baby.y = (self.y+other.y)/2
+        return baby
 
 def line(x1,x2,y1,y2):
     r = ((x1-x2)**2 + (y1-y2)**2)**0.5
@@ -100,10 +91,17 @@ def collisions(viruses, mans):
     for virus in viruses:
         for man in mans:
             if virus - man < virus.radius + man.radius:
-                man.infected = True
+                mans.remove(man)
                 man.color = (255,255,255)
-                man.infected_time = 100
+    return mans
 
+def borning(animals):
+    children = []
+    for mother in animals:
+        for father in animals:
+            if mother - father < mother.radius + father.radius:
+                children.append(mother+father)
+    return children
 
 if __name__ == "__main__":
     screen1 = game_init()
@@ -120,9 +118,8 @@ if __name__ == "__main__":
             item.move()
         for item in mans:
             item.move()
-            item.treating()
-        collisions(viruses,mans)
-        mans.append()
+        mans = collisions(viruses,mans)
+        mans += borning(mans)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
