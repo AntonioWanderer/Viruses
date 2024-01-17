@@ -6,17 +6,16 @@ width = 1200
 height = 800
 G = 0.001
 
-class virus:
+class creature:
     def __init__(self):
-        self.color = (255,0,0)
+        self.color = (255,255,255)
         self.max_hp = 10
         self.hp = 10
-        self.radius = 2
+        self.radius = 5
         self.x = randint(0, width)
         self.y = randint(0,height)
         self.velocity_x = 2*random()-1
         self.velocity_y = 2*random()-1
-        self.infect = False
         self.score = 0
         self.acceleration_x = 0
         self.acceleration_y = 0
@@ -47,46 +46,19 @@ class virus:
         self.velocity_normalisation()
         self.border()
 
-class man:
+class virus(creature):
+    def __init__(self):
+        self.color = (255,0,0)
+        self.radius = 2
+        self.infect = False
+        self.score = 0
+
+class man(creature):
     def __init__(self):
         self.color = (0,255,0)
-        self.max_hp = 10
-        self.hp = 10
         self.radius = 5
-        self.x = randint(0, width)
-        self.y = randint(0, height)
-        self.velocity_x = 2*random()-1
-        self.velocity_y = 2*random()-1
         self.infected = False
         self.infected_time = 0
-        self.acceleration_x = 0
-        self.acceleration_y = 0
-    #reversing in walls
-    def border(self):
-        if self.x < self.radius:
-            self.velocity_x = - self.velocity_x
-            self.x = self.radius
-        if self.x > width-self.radius:
-            self.velocity_x = - self.velocity_x
-            self.x = width-self.radius
-        if self.y < self.radius:
-            self.velocity_y = - self.velocity_y
-            self.y = self.radius
-        if self.y > height-self.radius:
-            self.velocity_y = - self.velocity_y
-            self.y = height-self.radius
-
-    def velocity_normalisation(self):
-        length = line(0,self.velocity_x,0,self.velocity_y)
-        self.velocity_x /= length
-        self.velocity_y /= length
-    def move(self):
-        self.x += self.velocity_x
-        self.y += self.velocity_y
-        self.velocity_x += self.acceleration_x
-        self.velocity_y += self.acceleration_y
-        self.velocity_normalisation()
-        self.border()
 
     def treating(self):
         if self.infected_time > 0:
