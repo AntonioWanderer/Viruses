@@ -1,6 +1,7 @@
 from random import randint, random
 import pygame, time
 import numpy as np
+import matplotlib.pyplot as plt
 
 #screen size
 width = 1200
@@ -56,7 +57,7 @@ class creature:
 class virus(creature):
     def __init__(self):
         creature.__init__(self)
-        self.maxlife = 1e7
+        self.maxlife = 1e7/2
         self.color = (255,0,0)
         self.radius = 5
         self.score = 0
@@ -68,7 +69,7 @@ class virus(creature):
 class man(creature):
     def __init__(self):
         creature.__init__(self)
-        self.maxlife = 1e8
+        self.maxlife = 1e9
         self.color = (0,255,0)
         self.radius = 5
 
@@ -96,8 +97,9 @@ def drawing(screen, viruses, mans):
 def collisions(viruses, mans):
     for virus in viruses:
         for man in mans:
-            if virus - man < virus.radius + man.radius:
+            if virus - man < virus.radius + man.radius and random()>0.9:
                 mans.remove(man)
+                virus.lifetime = 0
                 man.color = (255,255,255)
     return mans
 
@@ -111,19 +113,23 @@ def comeOld(animals):
     for animal in animals:
         animal.lifetime += 1
 def borning(animals):
-    children = []
     for mother in animals:
         for father in animals:
-            if mother - father < mother.radius + father.radius and random()>0.99:
-                children.append(mother+father)
-    return children
+            if mother - father < mother.radius + father.radius and random()>0.9:
+                animals.append(mother+father)
+                mother.x = randint(0,width)
+                mother.y = randint(0, height)
+                father.x = randint(0, width)
+                father.y = randint(0, height)
+    return animals
 
 if __name__ == "__main__":
     screen1 = game_init()
-    viruses = [virus() for i in range(100)]
-    mans = [man() for i in range(100)]
+    viruses = [virus() for i in range(50)]
+    mans = [man() for i in range(50)]
 
     timer = 0 #timer of steps
+    history = []
     running = True
     while running:
         timer += 1
@@ -138,9 +144,9 @@ if __name__ == "__main__":
         comeOld(mans)
         viruses = dieOld(viruses)
         mans = dieOld(mans)
-        mans += borning(mans)
-        viruses += borning(viruses)
-
+        mans = borning(mans)
+        viruses = borning(viruses)
+        history.append((len(viruses),len(mans)))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -148,3 +154,7 @@ if __name__ == "__main__":
             elif event.type == pygame.KEYDOWN:
                 match event.key:
                     case 27: running = False
+
+    plt.plot([hist[0] for hist in history])
+    plt.plot([hist[1] for hist in history])
+    plt.show()

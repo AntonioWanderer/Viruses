@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ec67b88-0c04-485c-93e3-8bd99f977e4f" name="Changes" comment="death">
+    <list default="true" id="4ec67b88-0c04-485c-93e3-8bd99f977e4f" name="Changes" comment="deathOld">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/viruses.py" beforeDir="false" afterPath="$PROJECT_DIR$/viruses.py" afterDir="false" />
     </list>
@@ -143,7 +143,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705487859724</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="deathOld">
+      <option name="closed" value="true" />
+      <created>1705489377778</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1705489377778</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -151,6 +159,7 @@
     <MESSAGE value="Accelerated viruses" />
     <MESSAGE value="Class creature" />
     <MESSAGE value="death" />
-    <option name="LAST_COMMIT_MESSAGE" value="death" />
+    <MESSAGE value="deathOld" />
+    <option name="LAST_COMMIT_MESSAGE" value="deathOld" />
   </component>
 </project>
