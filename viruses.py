@@ -1,5 +1,6 @@
 from random import randint, random
-import pygame, time, numpy
+import pygame, time
+import numpy as np
 
 #screen size
 width = 1200
@@ -19,6 +20,10 @@ class creature:
         self.score = 0
         self.acceleration_x = 0
         self.acceleration_y = 0
+
+    def __sub__(self, other):
+        distance = ((self.x-self.y)**2+(other.x-other.y)**2)**0.5
+        return distance
 
     def border(self):
         if self.x < self.radius:
@@ -43,18 +48,26 @@ class creature:
         self.y += self.velocity_y
         self.velocity_x += self.acceleration_x
         self.velocity_y += self.acceleration_y
-        self.velocity_normalisation()
+        #self.velocity_normalisation()
         self.border()
 
 class virus(creature):
     def __init__(self):
+        creature.__init__(self)
         self.color = (255,0,0)
         self.radius = 2
         self.infect = False
         self.score = 0
 
+    def __add__(self, other):
+        baby = virus()
+        baby.x = (self.x+other.x)/2
+        baby.y = (self.y+other.y)/2
+        return baby
+
 class man(creature):
     def __init__(self):
+        creature.__init__(self)
         self.color = (0,255,0)
         self.radius = 5
         self.infected = False
@@ -82,49 +95,15 @@ def drawing(screen, viruses, mans):
     for item in mans:
         pygame.draw.circle(screen, item.color, (item.x, item.y), item.radius)
     pygame.display.update()
-#virus2man infection
-def gravity(vector):
-    return G * 1 / abs(vector) ** 7 * (vector)
+#infection
 def collisions(viruses, mans):
-    distances = numpy.zeros((len(viruses),len(mans)))
-    for v in range(len(viruses)):
-        for m in range(len(mans)):
-            distances[v, m] = line(viruses[v].x, mans[m].x, viruses[v].y, mans[m].y)
+    for virus in viruses:
+        for man in mans:
+            if virus - man < virus.radius + man.radius:
+                man.infected = True
+                man.color = (255,255,255)
+                man.infected_time = 100
 
-    for v in range(len(viruses)):
-        viruses[v].acceleration_x = 0
-        viruses[v].acceleration_y = 0
-        for m in range(len(mans)):
-            if distances[v, m] <= viruses[v].radius + mans[m].radius:
-                viruses[v].infect = True
-                viruses[v].score += 1
-                mans[m].infected = True
-                mans[m].color = (255,255,255)
-                mans[m].infected_time = 100
-            elif distances[v, m] <= viruses[v].radius * 10:
-                viruses[v].acceleration_x += gravity(mans[m].x-viruses[v].x)
-                viruses[v].acceleration_y += gravity(mans[m].y-viruses[v].y)
-    for m in range(len(mans)):
-        mans[m].acceleration_x = 0
-        mans[m].acceleration_y = 0
-        for v in range(len(viruses)):
-            if distances[v,m] <= mans[m].radius * 10:
-                mans[m].acceleration_x -= gravity(mans[m].x - viruses[v].x)
-                mans[m].acceleration_y -= gravity(mans[m].y - viruses[v].y)
-
-    #man2man infection
-    for item_v in mans:
-     for item_m in mans:
-         distance = line(item_v.x,item_m.x,item_v.y,item_m.y)
-         if distance <= item_v.radius + item_m.radius:
-             if item_v.infected and not item_m.infected:
-                 item_m.infected = True
-                 item_m.color = (255,255,255)
-                 item_m.infected_time = 100
-             elif not item_v.infected and item_m.infected:
-                 item_v.infected = True
-                 item_v.color = (255,255,255)
-                 item_v.infected_time = 100
 
 if __name__ == "__main__":
     screen1 = game_init()
@@ -135,7 +114,7 @@ if __name__ == "__main__":
     running = True
     while running:
         timer += 1
-        time.sleep(0.0005)
+        time.sleep(0.005)
         drawing(screen1,viruses,mans)
         for item in viruses:
             item.move()
@@ -143,6 +122,7 @@ if __name__ == "__main__":
             item.move()
             item.treating()
         collisions(viruses,mans)
+        mans.append()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
